@@ -20,7 +20,8 @@ PROTEIN_NAMESPACE = 'UNIPROT'
 OMNIPATH_URL = 'http://omnipathdb.org/'
 INTERACTIONS_URL = '%s/interactions/' % OMNIPATH_URL
 PTMS_URL = '%s/ptms/' % OMNIPATH_URL
-
+INTERACTIONS_PATH = os.path.join(DATA_DIR, 'interactions.tsv')
+PTMS_PATH = os.path.join(DATA_DIR, 'ptms.tsv')
 
 def get_version() -> str:
     """Get the software version."""
