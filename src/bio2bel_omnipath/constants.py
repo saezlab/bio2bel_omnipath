@@ -11,9 +11,15 @@ __all__ = [
     'get_version',
 ]
 
-VERSION = '0.0.1-dev'
+VERSION = '0.0.1'
 MODULE_NAME = 'omnipath'
 DATA_DIR = get_data_dir(MODULE_NAME)
+
+PROTEIN_NAMESPACE = 'UNIPROT'
+
+OMNIPATH_URL = 'http://omnipathdb.org/'
+INTERACTIONS_URL = '%s/interactions/' % OMNIPATH_URL
+PTMS_URL = '%s/ptms/' % OMNIPATH_URL
 
 
 def get_version() -> str:
