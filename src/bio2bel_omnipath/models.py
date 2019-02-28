@@ -22,7 +22,13 @@ SQLAlchemy models for Bio2BEL OmniPath.
 
 import logging
 
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+import sqlalchemy
+import sqlalchemy.ext.declarative
+import sqlalchemy.orm
+
+import pybel
+
+from .constants import MODULE_NAME
 
 __all__ = [
     'Base',
@@ -30,4 +36,24 @@ __all__ = [
 
 logger = logging.getLogger(__name__)
 
-Base: DeclarativeMeta = declarative_base()
+
+PROTEIN_TABLE_NAME = f'{MODULE_NAME}_protein'
+INTERACTION_TABLE_NAME = f'{MODULE_NAME}_interaction'
+PTM_TABLE_NAME = f'{MODULE_NAME}_ptm'
+
+
+Base: sqlalchemy.ext.declarative.DeclarativeMeta = (
+    sqlalchemy.ext.declarative.declarative_base()
+)
+
+
+class Protein(Base):
+    """
+    Represents a protein.
+    """
+    
+    __tablename__ = PROTEIN_TABLE_NAME
+    
+    id = sqlalchemy.Column(Integer, primary_key = True)
+    
+    taxonomy_id = Column()

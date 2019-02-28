@@ -21,7 +21,9 @@ Constants for Bio2BEL OmniPath.
 """
 
 import os
+
 import bio2bel
+
 
 __all__ = [
     'VERSION',
@@ -33,12 +35,16 @@ __all__ = [
 VERSION = '0.0.1'
 MODULE_NAME = 'omnipath'
 DATA_DIR = bio2bel.get_data_dir(MODULE_NAME)
+DEFAULT_CONNECTION = bio2bel.get_connection(MODULE_NAME)
 
 PROTEIN_NAMESPACE = 'UNIPROT'
 
-OMNIPATH_URL = 'http://omnipathdb.org/'
-INTERACTIONS_URL = '%s/interactions/' % OMNIPATH_URL
-PTMS_URL = '%s/ptms/' % OMNIPATH_URL
+OMNIPATH_URL = (
+    'http://omnipathdb.org/%s/?'
+    'fields=sources,references&gensymbols=1'
+)
+INTERACTIONS_URL = OMNIPATH_URL % 'interactions'
+PTMS_URL = OMNIPATH_URL % 'ptms'
 
 URLS = {
     'interactions': INTERACTIONS_URL,
