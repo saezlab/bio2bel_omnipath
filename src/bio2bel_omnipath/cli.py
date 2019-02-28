@@ -1,11 +1,29 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
+#  This file is part of the `bio2bel_omnipath` python module
+#
+#  Copyright (c) 2019
+#  Uniklinik RWTH Aachen
+#  Heidelberg University
+#
+#  File author(s): Dénes Türei (turei.denes@gmail.com)
+#
+#  Distributed under the MIT License.
+#  See accompanying file LICENSE or copy at
+#      https://spdx.org/licenses/MIT.html
+#
+#  Website: http://omnipathdb.org/
+#
 
-"""Command line interface for Bio2BEL OmniPath.
+"""
+Command line interface for Bio2BEL OmniPath.
 
-Why does this file exist, and why not put this in ``bio2bel_omnipath.__main__``?
+Why does this file exist, and why not put this in
+``bio2bel_omnipath.__main__``?
 
-You might be tempted to import things from ``bio2bel_omnipath.__main__`` later,
-but that will cause problems - the code will get executed twice:
+You might be tempted to import things from ``bio2bel_omnipath.__main__``
+later, but that will cause problems - the code will get executed twice:
 
 - When you run ``python3 -m bio2bel_omnipath`` python will execute
   ``__main__.py`` as a script. That means there won't be any
