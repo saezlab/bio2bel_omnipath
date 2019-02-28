@@ -55,7 +55,15 @@ def get(query_type, url = None, cache = True, force_download = False):
         Download again even if local copy exists.
     """
     
-    url = url or URLS[query_type]
+    if url is None:
+        
+        try:
+            
+            url = URLS[query_type]
+            
+        except KeyError:
+            
+            raise NotImplementedError
     
     if (not os.path.exists(url) or force_download) and cache:
         
@@ -64,3 +72,23 @@ def get(query_type, url = None, cache = True, force_download = False):
     df = pd.read_table(url)
     
     return df
+
+
+def get_interactions(**kwargs):
+    
+    return get('interactions', **kwargs)
+
+
+def get_ptms(**kwargs):
+    
+    return get('ptms', **kwargs)
+
+
+def get_complexes(**kwargs):
+    
+    return get('complexes', **kwargs)
+
+
+def get_annotations(**kwargs):
+    
+    return get('annotations', **kwargs)
