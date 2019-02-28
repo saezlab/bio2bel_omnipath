@@ -2,7 +2,8 @@
 
 """Constants for Bio2BEL OmniPath."""
 
-from bio2bel import get_data_dir
+import os
+import bio2bel
 
 __all__ = [
     'VERSION',
@@ -13,15 +14,19 @@ __all__ = [
 
 VERSION = '0.0.1'
 MODULE_NAME = 'omnipath'
-DATA_DIR = get_data_dir(MODULE_NAME)
+DATA_DIR = bio2bel.get_data_dir(MODULE_NAME)
 
 PROTEIN_NAMESPACE = 'UNIPROT'
 
 OMNIPATH_URL = 'http://omnipathdb.org/'
 INTERACTIONS_URL = '%s/interactions/' % OMNIPATH_URL
 PTMS_URL = '%s/ptms/' % OMNIPATH_URL
-INTERACTIONS_PATH = os.path.join(DATA_DIR, 'interactions.tsv')
-PTMS_PATH = os.path.join(DATA_DIR, 'ptms.tsv')
+
+URLS = {
+    'interactions': INTERACTIONS_URL,
+    'ptms': PTMS_URL,
+}
+
 
 def get_version() -> str:
     """Get the software version."""
