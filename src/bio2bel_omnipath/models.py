@@ -37,23 +37,170 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-PROTEIN_TABLE_NAME = f'{MODULE_NAME}_protein'
-INTERACTION_TABLE_NAME = f'{MODULE_NAME}_interaction'
-PTM_TABLE_NAME = f'{MODULE_NAME}_ptm'
+ENTITY_TABLE_NAME = '%s_molecular_entity' % MODULE_NAME
+INTERACTION_TABLE_NAME = '%s_interaction' % MODULE_NAME
+PTM_TABLE_NAME = '%s_ptm' % MODULE_NAME
+TAXONOMY_TABLE_NAME = '%s_taxonomy' % MODULE_NAME
+RESOURCE_TABLE_NAME = '%s_resource' % MODULE_NAME
+REFERENCE_TABLE_NAME = '%s_reference' % MODULE_NAME
 
 
-Base: sqlalchemy.ext.declarative.DeclarativeMeta = (
-    sqlalchemy.ext.declarative.declarative_base()
-)
+Base = sqlalchemy.ext.declarative.declarative_base()
 
 
-class Protein(Base):
+class MolecularEntity(Base):
     """
     Represents a protein.
     """
     
     __tablename__ = PROTEIN_TABLE_NAME
     
-    id = sqlalchemy.Column(Integer, primary_key = True)
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
     
-    taxonomy_id = Column()
+    primary_id = sqlalchemy.Comumn(
+        sqlalchemy.String(16),
+        nullable = False,
+        index = True,
+        doc = 'UniProtKB ID or miRBase mature miRNA AC',
+    )
+    
+    secondary_id = sqlalchemy.Comumn(
+        sqlalchemy.String(24),
+        nullable = False,
+        index = True,
+        doc = 'Primary Gene Symbol or miRBase mature miRNA name',
+    )
+
+
+class Interaction(Base):
+    """
+    Represents an interaction between molecular entities.
+    """
+    
+    __tablename__ = INTERACTION_TABLE_NAME
+    
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    
+    source_id = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Key of the source MolecularEntity',
+    )
+    
+    target_id = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Key of the target MolecularEntity',
+    )
+    
+    is_directed = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Boolean: the interaction is directed',
+    )
+    
+    is_stimulation = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Boolean: the interaction has stimulatory effect',
+    )
+    
+    is_inhibition = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Boolean: the interaction has inhibitory effect',
+    )
+
+
+class Taxonomy(Base):
+    """
+    Represents taxons identified by NCBI Taxonomy IDs.
+    """
+    
+    __tablename__ = TAXONOMY_TABLE_NAME
+    
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    
+    ncbi_taxonomy_id = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'NCBI Taxonomy ID',
+    )
+
+
+class Ptm(Base):
+    """
+    Represents a post-translational modification.
+    """
+    
+    __tablename__ = PTM_TABLE_NAME
+    
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    
+    sequence_offset = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'Sequence position of the modified residue',
+    )
+    
+    residue_type = sqlalchemy.Column(
+        sqlalchemy.String(1),
+        nullable = False,
+        index = True,
+        doc = 'Single letter code of the modified residue',
+    )
+    
+    modification_type = sqlalchemy.Column(
+        sqlalchemy.String(24),
+        nullable = False,
+        index = True,
+        doc = 'Modification type',
+    )
+    
+    uniprot_id = sqlalchemy.Column(
+        sqlalchemy.String(10),
+        nullable = False,
+        index = True,
+        doc = 'UniProtKB ID of the modified protein',
+    )
+
+
+class Reference(Base):
+    """
+    Represents a literature reference identified by PubMed ID.
+    """
+    
+    __tablename__ = REFERENCE_TABLE_NAME
+    
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    
+    pubmed_id = sequence_offset = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable = False,
+        index = True,
+        doc = 'PubMed ID',
+    )
+
+
+class Resource(Base):
+    """
+    Represents a database (resource).
+    """
+    
+    __tablename__ = RESOURCE_TABLE_NAME
+    
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
+    
+    pubmed_id = sequence_offset = sqlalchemy.Column(
+        sqlalchemy.String(24),
+        nullable = False,
+        index = True,
+        doc = 'Database',
+    )
