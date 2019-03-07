@@ -65,10 +65,16 @@ class Manager(bio2bel.AbstractManager):
         Populates the Bio2BEL OmniPath database.
         """
         
+        self.populate_interactions()
+        self.populate_ptms()
+    
+    
+    def populate_interactions(self):
+        
         log.info('Populating database.')
         
         interactions = parser.get_interactions()
-        ptms = parser.get_ptms()
+        
         
         log.info('Building models.')
         
@@ -174,6 +180,11 @@ class Manager(bio2bel.AbstractManager):
                 )
                 
                 interaction.resources.append(resource_i)
+    
+    
+    def populate_ptms(self):
+        
+        ptms = parser.get_ptms()
         
         for (
             source, target,
