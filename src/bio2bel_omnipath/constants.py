@@ -41,10 +41,10 @@ PROTEIN_NAMESPACE = 'UNIPROT'
 
 OMNIPATH_URL = (
     'http://omnipathdb.org/%s/?'
-    'fields=sources,references&gensymbols=1'
+    'fields=sources,references%s,ncbi_tax_id&gensymbols=1'
 )
-INTERACTIONS_URL = OMNIPATH_URL % 'interactions'
-PTMS_URL = OMNIPATH_URL % 'ptms'
+INTERACTIONS_URL = OMNIPATH_URL % (',type', 'interactions')
+PTMS_URL = OMNIPATH_URL % ('', 'ptms')
 
 URLS = {
     'interactions': INTERACTIONS_URL,

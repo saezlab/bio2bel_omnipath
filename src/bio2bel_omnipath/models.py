@@ -36,7 +36,7 @@ __all__ = [
 
 logger = logging.getLogger(__name__)
 
-
+# entity tables
 ENTITY_TABLE_NAME = '%s_molecular_entity' % MODULE_NAME
 INTERACTION_TABLE_NAME = '%s_interaction' % MODULE_NAME
 PTM_TABLE_NAME = '%s_ptm' % MODULE_NAME
@@ -47,6 +47,7 @@ ENTITY_TYPE_TABLE_NAME = '%s_entity_type' % MODULE_NAME
 INTERACTION_TYPE_TABLE_NAME = '%s_interaction_type' % MODULE_NAME
 PTM_TYPE_TABLE_NAME = '%s_ptm_type' % MODULE_NAME
 
+# many to many association tables
 ASSOC_INT_REF_TABLE_NAME = '%s_interaction_reference' % MODULE_NAME
 ASSOC_INT_RES_TABLE_NAME = '%s_interaction_resource' % MODULE_NAME
 ASSOC_ENT_TAX_TABLE_NAME = '%s_entity_taxonomy' % MODULE_NAME
@@ -71,11 +72,13 @@ assoc_res_ref = sqlalchemy.Table(
         'resource_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % RESOURCE_TABLE_NAME),
+        primary_key = True,
     ),
     sqlalchemy.Column(
         'reference_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % REFERENCE_TABLE_NAME),
+        primary_key = True,
     ),
 )
 
@@ -87,11 +90,13 @@ assoc_int_ref = sqlalchemy.Table(
         'interaction_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % INTERACTION_TABLE_NAME),
+        primary_key = True,
     ),
     sqlalchemy.Column(
         'reference_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % REFERENCE_TABLE_NAME),
+        primary_key = True,
     ),
 )
 
@@ -103,11 +108,13 @@ assoc_int_res = sqlalchemy.Table(
         'interaction_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % INTERACTION_TABLE_NAME),
+        primary_key = True,
     ),
     sqlalchemy.Column(
         'resource_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % RESOURCE_TABLE_NAME),
+        primary_key = True,
     ),
 )
 
@@ -119,11 +126,13 @@ assoc_int_ptm = sqlalchemy.Table(
         'interaction_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % INTERACTION_TABLE_NAME),
+        primary_key = True,
     ),
     sqlalchemy.Column(
         'ptm_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % PTM_TABLE_NAME),
+        primary_key = True,
     ),
 )
 
@@ -135,11 +144,13 @@ assoc_ent_tax = sqlalchemy.Table(
         'molecular_entity_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % INTERACTION_TABLE_NAME),
+        primary_key = True,
     ),
     sqlalchemy.Column(
         'taxonomy_id',
         sqlalchemy.Integer,
         sqlalchemy.ForeignKey('%s.id' % TAXONOMY_TABLE_NAME),
+        primary_key = True,
     ),
 )
 
@@ -169,14 +180,6 @@ class MolecularEntity(Base):
         nullable = False,
         index = True,
         doc = 'Primary Gene Symbol or miRBase mature miRNA name',
-    )
-    
-    taxonomy_id = sqlalchemy.Column(
-        sqlalchemy.Integer,
-        sqlalchemy.ForeignKey('%s.id' % TAXONOMY_TABLE_NAME),
-        nullable = False,
-        index = True,
-        doc = 'Key of the taxon of the molecular entity.',
     )
     
     taxon = sqlalchemy.orm.relationship(
@@ -311,7 +314,7 @@ class InteractionType(Base):
     
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
     
-    entity_type = sqlalchemy.Column(
+    interaction_type = sqlalchemy.Column(
         sqlalchemy.String(18),
         nullable = False,
         index = True,
@@ -365,7 +368,12 @@ class Ptm(Base):
     
     references = sqlalchemy.orm.relationship(
         REFERENCE_TABLE_NAME,
-        secondary = assoc_int_ptm,
+        secondary = assoc_ref_ptm,
+    )
+    
+    resources = sqlalchemy.orm.relationship(
+        RESOURCE_TABLE_NAME,
+        secondary = assoc_res_ptm,
     )
     
     interactions = sqlalchemy.orm.relationship(
@@ -383,7 +391,7 @@ class PtmType(Base):
     
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key = True)
     
-    entity_type = sqlalchemy.Column(
+    ptm_type = sqlalchemy.Column(
         sqlalchemy.String(24),
         nullable = False,
         index = True,
